@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
 </head>
-<body>
-$END$
+<body class="container-fluid">
+    <h2 class='navbar-text'>Telegram Open Network - HTTP proxy</h2>
+    {% block body %}{% endblock %}
+    {% include "pages/index.html" %}
+    {% include "items/query_form.html" %}
 </body>
 </html>

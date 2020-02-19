@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% block bootstrap %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+{% endblock %}
+
+{% block query_form %}
+    <div class="query_form container">
+        <p>
+            Type your query here and I'll try to get it from TON sites.
+        </p>
+        <input type="text" value="test.ton" id="query_request">
+        <button type="button"
+            onclick="requestTonSite()"
+            class="btn btn-primary btn-lg"
+            value="Input"
+        >
+            Go!
+        </button>
+    </div>
+    <div class="result">
+
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+function requestTonSite() {
+    let result = document.querySelector(".result");
+    let query = document.querySelector("#query_request");
+
+    let xhr = new XMLHttpRequest();
+    let url = "/api/request"
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "text/html; charset=utf-8")
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            result.innerHTML = this.responseText
+        }
+    };
+
+    var data = JSON.stringify(
+        {
+            "path": query.value
+        }
+    );
+    console.log(data)
+    try {
+        xhr.send(data);        
+    } catch (error) {
+        result.innerHTML = `
+            Failed to get site with address ${query.value}
+        `
+    }
+}
+</script>
+{% endblock %}
