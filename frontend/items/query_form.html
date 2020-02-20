@@ -4,21 +4,41 @@
 {% endblock %}
 
 {% block query_form %}
-    <div class="query_form container">
-        <p>
-            Type your query here and I'll try to get it from TON sites.
-        </p>
-        <input type="text" value="test.ton" id="query_request">
-        <button type="button"
-            onclick="requestTonSite()"
-            class="btn btn-primary btn-lg"
-            value="Input"
-        >
-            Go!
-        </button>
+    <div
+        class="query_form container">
+        <label
+            for="query_request">
+            <span class="text-primary">Type address of TON site:</span>
+        </label>
+        <div
+            class="input-group input-group mb-3">
+            <div
+                class="input-group-prepend">
+                <span class="input-group-text">
+                    http://test.ton
+                </span>
+            </div>
+            <input
+                type="text"
+                class="form-control"
+                id="query_request"
+                placeholder="*.ton or *.andl"
+            >
+            <div
+                class="input-group-append">
+                <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    onclick="requestTonSite()"
+                >
+                Go!
+                </button>
+            </div>
+        </div>
     </div>
     <div class="result">
-
+        <div id="status">
+        </div>
     </div>
 {% endblock %}
 
@@ -27,6 +47,7 @@
 function requestTonSite() {
     let result = document.querySelector(".result");
     let query = document.querySelector("#query_request");
+    let req_status = document.querySelector("#status");
 
     let xhr = new XMLHttpRequest();
     let url = "/api/request"
@@ -37,6 +58,14 @@ function requestTonSite() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             result.innerHTML = this.responseText
+        }
+        else {
+            req_status.innerHTML = `
+                <div class="alert alert-primary" role="alert" aria-hidden="true">
+                    <h4><span class="badge badge-danger">${xhr.status}</span> ${this.responseText}</h4>
+                    
+                </div>
+            `
         }
     };
 
