@@ -7,7 +7,7 @@ from src.core.middlewares import cors_middleware
 from src.routes import route_web_proxy
 
 
-async def create_app():
+def create_app():
     app = web.Application(middlewares=[cors_middleware])
     aiohttp_jinja2.setup(
         app,

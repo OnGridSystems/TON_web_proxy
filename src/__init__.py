@@ -1,1 +1,1 @@
-from .core.web_proxy import create_app
+from src.core import create_app

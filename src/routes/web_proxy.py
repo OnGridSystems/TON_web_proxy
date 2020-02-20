@@ -23,11 +23,6 @@ async def index_ton_proxy(request: web.Request) -> web.Response:
     return response
 
 
-@route_web_proxy.get('/*')
-async def ton_wild_card(request: web.Request) -> web.Response:
-    return web.Response(body='<h1> QQ </h1>', status=200)
-
-
 @route_web_proxy.post('/api/request')
 async def request_ton_site(request: web.Request) -> web.Response:
     print(
@@ -47,10 +42,9 @@ async def request_ton_site(request: web.Request) -> web.Response:
             async with session.get(
                     path, proxy=target_url) as response:
                 raw_response = await response.text(encoding='utf-8')
-            print(raw_response)
             return web.Response(
                 body=raw_response,
-                status=200,
+                status=response.status,
                 headers={
                     'Content-Type': 'text/html',
                     'Referer': target_url
@@ -61,10 +55,9 @@ async def request_ton_site(request: web.Request) -> web.Response:
             async with session.get(
                     path, proxy=target_url, timeout=30) as response:
                 raw_response = await response.text(encoding='utf-8')
-            print(raw_response)
             return web.Response(
                 body=raw_response,
-                status=200,
+                status=response.status,
                 headers={
                     'Content-Type': 'text/html',
                     'Referer': target_url
