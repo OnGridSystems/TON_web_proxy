@@ -1,8 +1,11 @@
-import aiohttp
 import aiohttp_jinja2
+
 from aiohttp import web
 
 from src.settings import PROXY_SERVER_ADDRESS, PROXY_SERVER_PORT
+from src.utils.request_proxy import profixy_request
+from src.utils.url_parse import parse_url
+
 
 route_web_proxy = web.RouteTableDef()
 
@@ -22,52 +25,29 @@ async def index_ton_proxy(request: web.Request) -> web.Response:
     return response
 
 
+@route_web_proxy.get('/*')
+async def wild_card(request: web.Request) -> web.Response:
+    path = 'http://test.ton'
+    print(request.path)
+    await profixy_request(path)
+
+
 @route_web_proxy.post('/api/request')
 async def request_ton_site(request: web.Request) -> web.Response:
     print(
         f'Incoming request < [{request.method}] > '
         f'from: {request.host}{request.path}'
     )
-    request_body = await request.json()
-    path = request_body['path']
-    if len(path) != 0:
-        if 'http' or 'https' not in path:
-            path = f'http://{path}'
-            return await profixy_request(path)
-
-        elif 'http' or 'https' in path:
-            return await profixy_request(path)
-
-        else:
-            return web.Response(
-                text=(
-                    'Wrong request! ' f'Try to to use with proto: http://{path}'
-                ),
-                status=404,
-            )
+    request_body: dict = await request.json()
+    # raw_url: ParseResult = urlparse()
+    url: str = parse_url(request_body['path'])
+    print(f'Parsed URL: {url}')
+    if len(url) != 0:
+        return await profixy_request(url, target_url)
     else:
         return web.Response(
             text=(
                 'You are requested an empty address!'
             ),
             status=404
-        )
-
-
-async def profixy_request(path):
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(path, proxy=target_url, timeout=30) as response:
-                raw_response = await response.text(encoding='utf-8')
-                print(f'Proxifying request of "{path}"')
-            return web.Response(
-                body=raw_response,
-                status=response.status,
-                headers={'Content-Type': 'text/html', 'Referer': target_url},
-            )
-    except Exception as err:
-        return web.Response(
-            text=f'Occurred error while requesting specified address: "{path}"\n'
-                 f'Error context: {err.__context__}',
-            status=400
         )
