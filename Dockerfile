@@ -19,5 +19,4 @@ LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 
 EXPOSE 8080
-#CMD ["ls"]
 CMD ["python", "."]
