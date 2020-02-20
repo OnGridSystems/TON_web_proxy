@@ -67,7 +67,7 @@ async def profixy_request(path):
             )
     except Exception as err:
         return web.Response(
-            text=f'Occurred error while requesting specified address: "{path}"'
+            text=f'Occurred error while requesting specified address: "{path}"\n'
                  f'Error context: {err.__context__}',
             status=400
         )
