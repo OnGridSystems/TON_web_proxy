@@ -11,5 +11,4 @@ services:
       PROXY_SERVER_PORT: 8080
     ports:
       - "2731:2731"
-      - "8080:8080"
     restart: always

@@ -20,6 +20,5 @@ ENV COMMIT=${COMMIT}
 LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 
-EXPOSE 8080
-
+EXPOSE 80
 CMD ["python", "."]
