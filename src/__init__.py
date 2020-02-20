@@ -1,1 +1,1 @@
-from src.core import create_app
+from src.core import create_app  # noqa: F401

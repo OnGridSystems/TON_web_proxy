@@ -1,1 +1,1 @@
-from .web_proxy import create_app
+from .web_proxy import create_app  # noqa: F401
