@@ -9,7 +9,9 @@ RUN apt-get update && \
   apt-get remove -y gcc python-dev && \
   apt-get autoremove -y
 
-COPY . ./
+COPY __main__.py .
+COPY frontend frontend
+COPY src src
 
 ARG BRANCH=undefined
 ARG COMMIT=undefined
@@ -19,4 +21,5 @@ LABEL branch=${BRANCH}
 LABEL commit=${COMMIT}
 
 EXPOSE 8080
+
 CMD ["python", "."]
